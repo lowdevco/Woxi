@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { 
   Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, 
   TableRow, Typography, Button, IconButton, TextField, Dialog, 
-  DialogTitle, DialogContent, DialogActions, Stack, Chip, CircularProgress 
+  DialogTitle, DialogContent, DialogActions, Stack, Chip, CircularProgress, Divider
 } from '@mui/material';
-import { PersonAdd, Search, Edit, Delete, Label } from '@mui/icons-material';
+import { FiUserPlus as PersonAdd, FiSearch as Search, FiEdit as Edit, FiTrash as Delete, FiTag as Label } from 'react-icons/fi';
 import api from '../lib/api.js';
 
 export default function Contacts() {
@@ -142,7 +142,7 @@ export default function Contacts() {
         ) : (
           <TableContainer>
             <Table>
-              <TableHead sx={{ bgcolor: '#f8fafc' }}>
+              <TableHead sx={{ bgcolor: 'action.hover' }}>
                 <TableRow>
                   <TableCell sx={{ fontWeight: 700 }}>Name</TableCell>
                   <TableCell sx={{ fontWeight: 700 }}>Phone Number</TableCell>

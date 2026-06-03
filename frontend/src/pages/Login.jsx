@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Box, Container, Card, CardContent, TextField, Button, 
-  Typography, Link, Alert, CircularProgress, InputAdornment, IconButton
+  Typography, Link, Alert, CircularProgress, InputAdornment, IconButton, useTheme
 } from '@mui/material';
-import { Visibility, VisibilityOff, AlternateEmail, LockOpen, Person } from '@mui/icons-material';
+import { FiEye as Visibility, FiEyeOff as VisibilityOff, FiMail as AlternateEmail, FiLock as LockOpen, FiUser as Person } from 'react-icons/fi';
 import axios from 'axios';
 
 export default function Login() {
+  const theme = useTheme();
   const [isRegister, setIsRegister] = useState(false);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -74,7 +75,9 @@ export default function Login() {
         display: 'flex', 
         alignItems: 'center', 
         justifyContent: 'center',
-        background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+        background: theme.palette.mode === 'dark' 
+          ? 'linear-gradient(135deg, #030712 0%, #0b0f19 100%)' 
+          : 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
         p: 2
       }}
     >

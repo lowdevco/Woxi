@@ -4,7 +4,7 @@ import {
   Avatar, Typography, Divider, TextField, IconButton, Button, 
   Badge, CircularProgress, useTheme
 } from '@mui/material';
-import { Send, AccountCircle, Search, MoreVert } from '@mui/icons-material';
+import { FiSend as Send, FiUser as AccountCircle, FiSearch as Search, FiMoreVertical as MoreVert, FiMessageSquare as ChatIcon } from 'react-icons/fi';
 import api from '../lib/api.js';
 import { wsManager } from '../lib/websocket.js';
 
@@ -242,7 +242,7 @@ export default function Inbox() {
           </Grid>
 
           {/* Active Chat Conversation Panel */}
-          <Grid item xs={12} sm={8} sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: '#f1f5f9' }}>
+          <Grid item xs={12} sm={8} sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: (theme) => theme.palette.mode === 'dark' ? 'background.default' : '#f1f5f9' }}>
             {activeConv ? (
               <>
                 {/* Chat Panel Header */}

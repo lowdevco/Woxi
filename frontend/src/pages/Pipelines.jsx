@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { 
   Box, Typography, Button, Paper, Grid, Card, CardContent, 
   Stack, Avatar, Chip, CircularProgress, Dialog, DialogTitle, 
-  DialogContent, DialogActions, TextField, Select, MenuItem, InputLabel, FormControl 
+  DialogContent, DialogActions, TextField, Select, MenuItem, InputLabel, FormControl, IconButton 
 } from '@mui/material';
-import { Add, AccountCircle, AttachMoney } from '@mui/icons-material';
+import { FiPlus as Add, FiUser as AccountCircle } from 'react-icons/fi';
+import { FaRupeeSign as RupeeIcon } from 'react-icons/fa';
 import api from '../lib/api.js';
 
 export default function Pipelines() {
@@ -164,7 +165,7 @@ export default function Pipelines() {
                 minWidth: 280, 
                 maxWidth: 320, 
                 flexGrow: 1, 
-                bgcolor: '#f1f5f9', 
+                bgcolor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.03)' : '#f1f5f9', 
                 borderRadius: 3, 
                 p: 2, 
                 display: 'flex', 
@@ -188,7 +189,7 @@ export default function Pipelines() {
 
               {/* Total Value */}
               <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700, display: 'block', mb: 2 }}>
-                Total: ${stageTotalValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                Total: ₹${stageTotalValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
               </Typography>
 
               {/* Deals List */}
@@ -225,8 +226,8 @@ export default function Pipelines() {
                       </Box>
 
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Typography variant="body2" sx={{ fontWeight: 800, display: 'flex', alignItems: 'center', color: 'success.main' }}>
-                          <AttachMoney sx={{ fontSize: 14 }} /> {parseFloat(deal.value || 0).toLocaleString()}
+                        <Typography variant="body2" sx={{ fontWeight: 800, display: 'flex', alignItems: 'center', color: 'success.main', gap: 0.5 }}>
+                          <RupeeIcon style={{ fontSize: 13 }} /> {parseFloat(deal.value || 0).toLocaleString()}
                         </Typography>
                         <Chip label="WhatsApp" size="small" color="primary" variant="outlined" sx={{ height: 16, fontSize: 8, fontWeight: 700 }} />
                       </Box>
@@ -254,7 +255,7 @@ export default function Pipelines() {
             />
             <TextField
               fullWidth
-              label="Deal Value ($)"
+              label="Deal Value (INR)"
               type="number"
               value={value}
               onChange={e => setValue(e.target.value)}

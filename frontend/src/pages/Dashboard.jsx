@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Grid, Card, CardContent, Typography, Button, Stack, useTheme } from '@mui/material';
-import { 
-  ChatBubbleOutline, PeopleOutline, TrendingUp, AttachMoney, 
-  ArrowForward, WhatsApp
-} from '@mui/icons-material';
+import { FiMessageSquare as ChatBubbleOutline, FiUsers as PeopleOutline, FiTrendingUp as TrendingUp, FiArrowRight as ArrowForward } from 'react-icons/fi';
+import { FaWhatsapp as WhatsApp, FaRupeeSign as RupeeIcon } from 'react-icons/fa';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import api from '../lib/api.js';
 
@@ -56,30 +54,30 @@ export default function Dashboard() {
     { 
       title: 'Active Conversations', 
       value: stats.conversations, 
-      icon: <ChatBubbleOutline sx={{ fontSize: 28, color: 'primary.main' }} />,
+      icon: <ChatBubbleOutline size={28} style={{ color: theme.palette.primary.main }} />,
       color: theme.palette.primary.main,
-      bg: '#eff6ff'
+      bg: theme.palette.mode === 'dark' ? 'rgba(16, 185, 129, 0.15)' : '#eff6ff'
     },
     { 
       title: 'Total Contacts', 
       value: stats.contacts, 
-      icon: <PeopleOutline sx={{ fontSize: 28, color: 'secondary.main' }} />,
+      icon: <PeopleOutline size={28} style={{ color: theme.palette.secondary.main }} />,
       color: theme.palette.secondary.main,
-      bg: '#ecfdf5'
+      bg: theme.palette.mode === 'dark' ? 'rgba(37, 99, 235, 0.15)' : '#ecfdf5'
     },
     { 
       title: 'Deals in Pipeline', 
       value: stats.pipelines, 
-      icon: <TrendingUp sx={{ fontSize: 28, color: 'warning.main' }} />,
+      icon: <TrendingUp size={28} style={{ color: theme.palette.warning.main }} />,
       color: theme.palette.warning.main,
-      bg: '#fffbef'
+      bg: theme.palette.mode === 'dark' ? 'rgba(245, 158, 11, 0.15)' : '#fffbef'
     },
     { 
       title: 'Pipeline Value', 
-      value: `$${stats.pipelineValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 
-      icon: <AttachMoney sx={{ fontSize: 28, color: 'error.main' }} />,
+      value: stats.pipelineValue ? `₹${stats.pipelineValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '₹0.00', 
+      icon: <RupeeIcon size={28} style={{ color: theme.palette.error.main }} />,
       color: theme.palette.error.main,
-      bg: '#fef2f2'
+      bg: theme.palette.mode === 'dark' ? 'rgba(239, 68, 68, 0.15)' : '#fef2f2'
     },
   ];
 
@@ -154,7 +152,7 @@ export default function Dashboard() {
                         <stop offset="95%" stopColor={theme.palette.secondary.main} stopOpacity={0}/>
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={theme.palette.mode === 'dark' ? '#1e293b' : '#e2e8f0'} />
                     <XAxis dataKey="name" stroke="#64748b" style={{ fontSize: 12 }} />
                     <YAxis stroke="#64748b" style={{ fontSize: 12 }} />
                     <Tooltip />

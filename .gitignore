@@ -1,24 +1,49 @@
-
-# dependencies
-/node_modules
-/.pnp
+# Dependency folders
+node_modules/
+**/node_modules/
+.pnp
 .pnp.*
-.yarn/*
 
-# testing
-/coverage
+# Build outputs
+dist/
+**/dist/
+build/
+**/build/
+out/
+.next/
 
-# next.js
-/.next/
-/out/
+# Python Virtual Environments
+env/
+**/env/
+ENV/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
 
-# production
-/build
+# Python cache & compiler files
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# Local environment & secret files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+**/*.env
+
+# Databases & local logs
+*.log
+db.sqlite3
+db.sqlite3-journal
+
+# OS files
+.DS_Store
+Thumbs.db
 
 #misc
+*.txt
 changes_and_instructions.txt
-
-#env
-*./env
-*.env
-env
