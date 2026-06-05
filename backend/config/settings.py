@@ -1,3 +1,4 @@
+import dj_database_url
 import os
 from pathlib import Path
 from datetime import timedelta
@@ -9,7 +10,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = config('DJANGO_SECRET_KEY', default='django-insecure-crm-template-key-for-local-dev-only-change-this-in-prod')
+SECRET_KEY = config('DJANGO_SECRET_KEY',
+                    default='django-insecure-crm-template-key-for-local-dev-only-change-this-in-prod')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
@@ -27,14 +29,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     # Third party packages
 
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
     'channels',
-    
+
     # Local apps
 
     'apps.accounts',
@@ -79,7 +81,6 @@ ASGI_APPLICATION = 'config.asgi.application'
 # Connect to PostgreSQL using standard Django database settings
 # Use Supabase PostgreSQL connection string in DATABASE_URL if available
 # Automatically falls back to local SQLite if URL is empty or matches placeholder
-import dj_database_url
 
 database_url = config('DATABASE_URL', default='')
 
@@ -131,7 +132,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom User Auth
 
-AUTH_USER_MODEL = 'auth.User'  # Using standard Django user, profiles will hold custom info
+# Using standard Django user, profiles will hold custom info
+AUTH_USER_MODEL = 'auth.User'
 
 # CORS Configuration
 
@@ -176,4 +178,5 @@ WHATSAPP_ACCESS_TOKEN = config('WHATSAPP_ACCESS_TOKEN', default='')
 WHATSAPP_PHONE_NUMBER_ID = config('WHATSAPP_PHONE_NUMBER_ID', default='')
 WHATSAPP_WABA_ID = config('WHATSAPP_WABA_ID', default='')
 WHATSAPP_VERIFY_TOKEN = config('WHATSAPP_VERIFY_TOKEN', default='')
-WHATSAPP_DECRYPTION_KEY = config('WHATSAPP_DECRYPTION_KEY', default='')  # AES-256-GCM webhook encryption key if used
+# AES-256-GCM webhook encryption key if used
+WHATSAPP_DECRYPTION_KEY = config('WHATSAPP_DECRYPTION_KEY', default='')

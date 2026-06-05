@@ -22,8 +22,9 @@ router.register(r'broadcasts', BroadcastViewSet, basename='broadcast')
 
 urlpatterns = [
     # WhatsApp webhook endpoint
-    path('whatsapp/webhook/', WhatsAppWebhookView.as_view(), name='whatsapp_webhook'),
-    
+    path('whatsapp/webhook/', WhatsAppWebhookView.as_view(),
+         name='whatsapp_webhook'),
+
     # CRM API views
     path('', include(router.urls)),
 ]

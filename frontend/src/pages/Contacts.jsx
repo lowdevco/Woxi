@@ -1,24 +1,47 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, 
-  TableRow, Typography, Button, IconButton, TextField, Dialog, 
-  DialogTitle, DialogContent, DialogActions, Stack, Chip, CircularProgress, Divider
-} from '@mui/material';
-import { FiUserPlus as PersonAdd, FiSearch as Search, FiEdit as Edit, FiTrash as Delete, FiTag as Label } from 'react-icons/fi';
-import api from '../lib/api.js';
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Button,
+  IconButton,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Stack,
+  Chip,
+  CircularProgress,
+  Divider,
+} from "@mui/material";
+import {
+  FiUserPlus as PersonAdd,
+  FiSearch as Search,
+  FiEdit as Edit,
+  FiTrash as Delete,
+  FiTag as Label,
+} from "react-icons/fi";
+import api from "../lib/api.js";
 
 export default function Contacts() {
   const [contacts, setContacts] = useState([]);
   const [tags, setTags] = useState([]);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
-  
+
   // Dialog state
   const [open, setOpen] = useState(false);
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [company, setCompany] = useState('');
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [company, setCompany] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
 
   useEffect(() => {
@@ -28,8 +51,8 @@ export default function Contacts() {
   const fetchData = async () => {
     try {
       const [contactsRes, tagsRes] = await Promise.all([
-        api.get('/crm/contacts/'),
-        api.get('/crm/tags/'),
+        api.get("/crm/contacts/"),
+        api.get("/crm/tags/"),
       ]);
       setContacts(contactsRes.data);
       setTags(tagsRes.data);
@@ -41,10 +64,10 @@ export default function Contacts() {
   };
 
   const handleOpenDialog = () => {
-    setName('');
-    setPhone('');
-    setEmail('');
-    setCompany('');
+    setName("");
+    setPhone("");
+    setEmail("");
+    setCompany("");
     setSelectedTags([]);
     setOpen(true);
   };
@@ -54,8 +77,10 @@ export default function Contacts() {
   };
 
   const handleToggleTag = (tagId) => {
-    setSelectedTags(prev => 
-      prev.includes(tagId) ? prev.filter(id => id !== tagId) : [...prev, tagId]
+    setSelectedTags((prev) =>
+      prev.includes(tagId)
+        ? prev.filter((id) => id !== tagId)
+        : [...prev, tagId],
     );
   };
 
@@ -72,8 +97,8 @@ export default function Contacts() {
     };
 
     try {
-      const res = await api.post('/crm/contacts/', payload);
-      setContacts(prev => [res.data, ...prev]);
+      const res = await api.post("/crm/contacts/", payload);
+      setContacts((prev) => [res.data, ...prev]);
       handleCloseDialog();
     } catch (err) {
       console.error("Error creating contact:", err);
@@ -81,33 +106,47 @@ export default function Contacts() {
   };
 
   const handleDeleteContact = async (contactId) => {
-    if (!window.confirm("Are you sure you want to delete this contact?")) return;
+    if (!window.confirm("Are you sure you want to delete this contact?"))
+      return;
     try {
       await api.delete(`/crm/contacts/${contactId}/`);
-      setContacts(prev => prev.filter(c => c.id !== contactId));
+      setContacts((prev) => prev.filter((c) => c.id !== contactId));
     } catch (err) {
       console.error("Error deleting contact:", err);
     }
   };
 
-  const filteredContacts = contacts.filter(contact => {
+  const filteredContacts = contacts.filter((contact) => {
     const term = search.toLowerCase();
-    const cName = contact.name?.toLowerCase() || '';
-    const cPhone = contact.phone?.toLowerCase() || '';
-    const cCompany = contact.company?.toLowerCase() || '';
-    return cName.includes(term) || cPhone.includes(term) || cCompany.includes(term);
+    const cName = contact.name?.toLowerCase() || "";
+    const cPhone = contact.phone?.toLowerCase() || "";
+    const cCompany = contact.company?.toLowerCase() || "";
+    return (
+      cName.includes(term) || cPhone.includes(term) || cCompany.includes(term)
+    );
   });
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 4,
+        }}
+      >
         <Box>
-          <Typography variant="h4" sx={{ fontWeight: 800 }}>CRM Contacts</Typography>
-          <Typography variant="subtitle1" color="text.secondary">Manage your client catalog, tags, and details.</Typography>
+          <Typography variant="h4" sx={{ fontWeight: 800 }}>
+            CRM Contacts
+          </Typography>
+          <Typography variant="subtitle1" color="text.secondary">
+            Manage your client catalog, tags, and details.
+          </Typography>
         </Box>
-        <Button 
-          variant="contained" 
-          startIcon={<PersonAdd />} 
+        <Button
+          variant="contained"
+          startIcon={<PersonAdd />}
           onClick={handleOpenDialog}
           sx={{ borderRadius: 2 }}
         >
@@ -116,71 +155,93 @@ export default function Contacts() {
       </Box>
 
       {/* Contacts Table Panel */}
-      <Paper sx={{ border: '1px solid', borderColor: 'divider', overflow: 'hidden' }}>
-        <Box sx={{ p: 3, display: 'flex', gap: 2 }}>
+      <Paper
+        sx={{ border: "1px solid", borderColor: "divider", overflow: "hidden" }}
+      >
+        <Box sx={{ p: 3, display: "flex", gap: 2 }}>
           <TextField
             placeholder="Search contacts by name, phone or company..."
             value={search}
-            onChange={e => setSearch(e.target.value)}
+            onChange={(e) => setSearch(e.target.value)}
             size="small"
-            sx={{ width: { xs: '100%', sm: 360 } }}
+            sx={{ width: { xs: "100%", sm: 360 } }}
             InputProps={{
-              startAdornment: <Search sx={{ color: 'text.secondary', mr: 1, fontSize: 20 }} />,
+              startAdornment: (
+                <Search sx={{ color: "text.secondary", mr: 1, fontSize: 20 }} />
+              ),
             }}
           />
         </Box>
         <Divider />
-        
+
         {loading ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
+          <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
             <CircularProgress />
           </Box>
         ) : filteredContacts.length === 0 ? (
-          <Box sx={{ py: 6, textAlign: 'center' }}>
-            <Typography color="text.secondary" sx={{ fontWeight: 500 }}>No contacts found.</Typography>
+          <Box sx={{ py: 6, textAlign: "center" }}>
+            <Typography color="text.secondary" sx={{ fontWeight: 500 }}>
+              No contacts found.
+            </Typography>
           </Box>
         ) : (
           <TableContainer>
             <Table>
-              <TableHead sx={{ bgcolor: 'action.hover' }}>
+              <TableHead sx={{ bgcolor: "action.hover" }}>
                 <TableRow>
                   <TableCell sx={{ fontWeight: 700 }}>Name</TableCell>
                   <TableCell sx={{ fontWeight: 700 }}>Phone Number</TableCell>
                   <TableCell sx={{ fontWeight: 700 }}>Email Address</TableCell>
                   <TableCell sx={{ fontWeight: 700 }}>Company</TableCell>
                   <TableCell sx={{ fontWeight: 700 }}>Tags</TableCell>
-                  <TableCell align="right" sx={{ fontWeight: 700 }}>Actions</TableCell>
+                  <TableCell align="right" sx={{ fontWeight: 700 }}>
+                    Actions
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {filteredContacts.map((contact) => (
                   <TableRow key={contact.id} hover>
-                    <TableCell sx={{ fontWeight: 600 }}>{contact.name || 'Unnamed Contact'}</TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>
+                      {contact.name || "Unnamed Contact"}
+                    </TableCell>
                     <TableCell>{contact.phone}</TableCell>
-                    <TableCell>{contact.email || '-'}</TableCell>
-                    <TableCell>{contact.company || '-'}</TableCell>
+                    <TableCell>{contact.email || "-"}</TableCell>
+                    <TableCell>{contact.company || "-"}</TableCell>
                     <TableCell>
-                      <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        useFlexGap
+                        flexWrap="wrap"
+                      >
                         {contact.tags_detail?.map((t) => (
-                          <Chip 
-                            key={t.id} 
-                            label={t.name} 
-                            size="small" 
-                            sx={{ 
-                              bgcolor: t.color, 
-                              color: '#fff', 
+                          <Chip
+                            key={t.id}
+                            label={t.name}
+                            size="small"
+                            sx={{
+                              bgcolor: t.color,
+                              color: "#fff",
                               fontWeight: 600,
-                              fontSize: '11px' 
-                            }} 
+                              fontSize: "11px",
+                            }}
                           />
                         ))}
-                        {(!contact.tags_detail || contact.tags_detail.length === 0) && (
-                          <Typography variant="caption" color="text.secondary">No tags</Typography>
+                        {(!contact.tags_detail ||
+                          contact.tags_detail.length === 0) && (
+                          <Typography variant="caption" color="text.secondary">
+                            No tags
+                          </Typography>
                         )}
                       </Stack>
                     </TableCell>
                     <TableCell align="right">
-                      <IconButton size="small" onClick={() => handleDeleteContact(contact.id)} color="error">
+                      <IconButton
+                        size="small"
+                        onClick={() => handleDeleteContact(contact.id)}
+                        color="error"
+                      >
                         <Delete fontSize="small" />
                       </IconButton>
                     </TableCell>
@@ -196,19 +257,21 @@ export default function Contacts() {
       <Dialog open={open} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
         <DialogTitle sx={{ fontWeight: 700 }}>Create CRM Contact</DialogTitle>
         <form onSubmit={handleSubmit}>
-          <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2.5, pt: 1 }}>
+          <DialogContent
+            sx={{ display: "flex", flexDirection: "column", gap: 2.5, pt: 1 }}
+          >
             <TextField
               fullWidth
               label="Contact Name"
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               placeholder="e.g. John Doe"
             />
             <TextField
               fullWidth
               label="Phone Number"
               value={phone}
-              onChange={e => setPhone(e.target.value)}
+              onChange={(e) => setPhone(e.target.value)}
               placeholder="e.g. +1234567890"
               required
             />
@@ -217,51 +280,72 @@ export default function Contacts() {
               label="Email Address"
               type="email"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="e.g. john@example.com"
             />
             <TextField
               fullWidth
               label="Company Name"
               value={company}
-              onChange={e => setCompany(e.target.value)}
+              onChange={(e) => setCompany(e.target.value)}
               placeholder="e.g. Acme Corp"
             />
 
             <Box>
-              <Typography variant="body2" sx={{ fontWeight: 700, mb: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  fontWeight: 700,
+                  mb: 1.5,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
                 <Label color="action" fontSize="small" /> Tags Assignment
               </Typography>
-              <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ gap: 1 }}>
-                {tags.map(t => {
+              <Stack
+                direction="row"
+                spacing={1}
+                useFlexGap
+                flexWrap="wrap"
+                sx={{ gap: 1 }}
+              >
+                {tags.map((t) => {
                   const selected = selectedTags.includes(t.id);
                   return (
                     <Chip
                       key={t.id}
                       label={t.name}
                       onClick={() => handleToggleTag(t.id)}
-                      variant={selected ? 'filled' : 'outlined'}
+                      variant={selected ? "filled" : "outlined"}
                       sx={{
-                        bgcolor: selected ? t.color : 'transparent',
+                        bgcolor: selected ? t.color : "transparent",
                         borderColor: t.color,
-                        color: selected ? '#fff' : t.color,
+                        color: selected ? "#fff" : t.color,
                         fontWeight: 600,
-                        '&:hover': {
-                          bgcolor: selected ? t.color : 'rgba(0,0,0,0.04)'
-                        }
+                        "&:hover": {
+                          bgcolor: selected ? t.color : "rgba(0,0,0,0.04)",
+                        },
                       }}
                     />
                   );
                 })}
                 {tags.length === 0 && (
-                  <Typography variant="caption" color="text.secondary">No tags configured in CRM.</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    No tags configured in CRM.
+                  </Typography>
                 )}
               </Stack>
             </Box>
           </DialogContent>
           <DialogActions sx={{ px: 3, pb: 3 }}>
-            <Button onClick={handleCloseDialog} color="inherit">Cancel</Button>
-            <Button type="submit" variant="contained">Create Contact</Button>
+            <Button onClick={handleCloseDialog} color="inherit">
+              Cancel
+            </Button>
+            <Button type="submit" variant="contained">
+              Create Contact
+            </Button>
           </DialogActions>
         </form>
       </Dialog>

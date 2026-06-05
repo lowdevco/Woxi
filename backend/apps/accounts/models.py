@@ -5,7 +5,8 @@ from django.dispatch import receiver
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name='profile')
     full_name = models.CharField(max_length=255, blank=True)
     avatar_url = models.URLField(max_length=1024, blank=True, null=True)
     role = models.CharField(max_length=50, default='user')

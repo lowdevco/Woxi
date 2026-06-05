@@ -5,14 +5,14 @@ from channels.generic.websocket import AsyncJsonWebsocketConsumer
 class RealtimeCRMConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
         self.user = self.scope.get("user")
-        
+
         # Enforce authentication on WebSocket connections
         if not self.user or self.user.is_anonymous:
             await self.close(code=4003)  # Forbidden code
             return
-            
+
         self.group_name = f"user_{self.user.id}"
-        
+
         # Join user-specific notification group
         await self.channel_layer.group_add(
             self.group_name,

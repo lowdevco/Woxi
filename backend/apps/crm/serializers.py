@@ -15,7 +15,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 class ContactNoteSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
-    
+
     class Meta:
         model = ContactNote
         fields = ['id', 'note_text', 'username', 'created_at']
@@ -25,30 +25,37 @@ class ContactNoteSerializer(serializers.ModelSerializer):
 class CustomFieldSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomField
-        fields = ['id', 'field_name', 'field_type', 'field_options', 'created_at']
+        fields = ['id', 'field_name', 'field_type',
+                  'field_options', 'created_at']
         read_only_fields = ['id', 'created_at']
 
 
 class ContactCustomValueSerializer(serializers.ModelSerializer):
-    field_name = serializers.CharField(source='custom_field.field_name', read_only=True)
-    field_type = serializers.CharField(source='custom_field.field_type', read_only=True)
-    
+    field_name = serializers.CharField(
+        source='custom_field.field_name', read_only=True)
+    field_type = serializers.CharField(
+        source='custom_field.field_type', read_only=True)
+
     class Meta:
         model = ContactCustomValue
-        fields = ['id', 'custom_field', 'field_name', 'field_type', 'value', 'created_at']
+        fields = ['id', 'custom_field', 'field_name',
+                  'field_type', 'value', 'created_at']
         read_only_fields = ['id', 'field_name', 'field_type', 'created_at']
 
 
 class ContactSerializer(serializers.ModelSerializer):
     tags_detail = TagSerializer(source='tags', many=True, read_only=True)
-    tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True, write_only=True, required=False)
+    tags = serializers.PrimaryKeyRelatedField(
+        queryset=Tag.objects.all(), many=True, write_only=True, required=False)
     custom_values = ContactCustomValueSerializer(many=True, read_only=True)
     notes = ContactNoteSerializer(many=True, read_only=True)
 
     class Meta:
         model = Contact
-        fields = ['id', 'phone', 'name', 'email', 'company', 'avatar_url', 'tags_detail', 'tags', 'custom_values', 'notes', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'tags_detail', 'custom_values', 'notes', 'created_at', 'updated_at']
+        fields = ['id', 'phone', 'name', 'email', 'company', 'avatar_url',
+                  'tags_detail', 'tags', 'custom_values', 'notes', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'tags_detail',
+                            'custom_values', 'notes', 'created_at', 'updated_at']
 
     def create(self, validated_data):
         tags = validated_data.pop('tags', [])
@@ -68,8 +75,9 @@ class ContactSerializer(serializers.ModelSerializer):
 
 
 class MessageSerializer(serializers.ModelSerializer):
-    sender_name = serializers.CharField(source='sender.username', read_only=True)
-    
+    sender_name = serializers.CharField(
+        source='sender.username', read_only=True)
+
     class Meta:
         model = Message
         fields = [
@@ -82,8 +90,9 @@ class MessageSerializer(serializers.ModelSerializer):
 
 class ConversationSerializer(serializers.ModelSerializer):
     contact_detail = ContactSerializer(source='contact', read_only=True)
-    assigned_agent_name = serializers.CharField(source='assigned_agent.username', read_only=True)
-    
+    assigned_agent_name = serializers.CharField(
+        source='assigned_agent.username', read_only=True)
+
     class Meta:
         model = Conversation
         fields = [
@@ -91,13 +100,15 @@ class ConversationSerializer(serializers.ModelSerializer):
             'assigned_agent_name', 'last_message_text', 'last_message_at',
             'unread_count', 'created_at', 'updated_at'
         ]
-        read_only_fields = ['id', 'contact_detail', 'assigned_agent_name', 'last_message_text', 'last_message_at', 'unread_count', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'contact_detail', 'assigned_agent_name',
+                            'last_message_text', 'last_message_at', 'unread_count', 'created_at', 'updated_at']
 
 
 class WhatsAppConfigSerializer(serializers.ModelSerializer):
     class Meta:
         model = WhatsAppConfig
-        fields = ['id', 'phone_number_id', 'waba_id', 'access_token', 'verify_token', 'status', 'connected_at']
+        fields = ['id', 'phone_number_id', 'waba_id',
+                  'access_token', 'verify_token', 'status', 'connected_at']
         read_only_fields = ['id', 'status', 'connected_at']
 
 
@@ -122,7 +133,7 @@ class PipelineStageSerializer(serializers.ModelSerializer):
 class DealSerializer(serializers.ModelSerializer):
     contact_detail = ContactSerializer(source='contact', read_only=True)
     stage_name = serializers.CharField(source='stage.name', read_only=True)
-    
+
     class Meta:
         model = Deal
         fields = [
@@ -130,13 +141,14 @@ class DealSerializer(serializers.ModelSerializer):
             'conversation', 'title', 'value', 'currency', 'notes',
             'expected_close_date', 'status', 'created_at', 'updated_at'
         ]
-        read_only_fields = ['id', 'contact_detail', 'stage_name', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'contact_detail',
+                            'stage_name', 'created_at', 'updated_at']
 
 
 class PipelineSerializer(serializers.ModelSerializer):
     stages = PipelineStageSerializer(many=True, read_only=True)
     deals = DealSerializer(many=True, read_only=True)
-    
+
     class Meta:
         model = Pipeline
         fields = ['id', 'name', 'stages', 'deals', 'created_at']
@@ -145,8 +157,9 @@ class PipelineSerializer(serializers.ModelSerializer):
 
 class BroadcastRecipientSerializer(serializers.ModelSerializer):
     contact_name = serializers.CharField(source='contact.name', read_only=True)
-    contact_phone = serializers.CharField(source='contact.phone', read_only=True)
-    
+    contact_phone = serializers.CharField(
+        source='contact.phone', read_only=True)
+
     class Meta:
         model = BroadcastRecipient
         fields = [
@@ -154,12 +167,13 @@ class BroadcastRecipientSerializer(serializers.ModelSerializer):
             'sent_at', 'delivered_at', 'read_at', 'replied_at',
             'error_message', 'created_at'
         ]
-        read_only_fields = ['id', 'contact_name', 'contact_phone', 'created_at']
+        read_only_fields = ['id', 'contact_name',
+                            'contact_phone', 'created_at']
 
 
 class BroadcastSerializer(serializers.ModelSerializer):
     recipients = BroadcastRecipientSerializer(many=True, read_only=True)
-    
+
     class Meta:
         model = Broadcast
         fields = [
